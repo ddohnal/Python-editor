@@ -1,19 +1,36 @@
 <html>
 
-        <head>            
+        <head>                           
             <script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.9.1/brython.js" integrity="sha512-bF2SeYie9u0aV7LMuK2lWGVKgakWUjZrsTSP/8RQn1xSjIJO87QQbqfK7al5JKNnIhgR6DY10qiRnFb1OeqQ2Q==" crossorigin="anonymous"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.9.1/brython_stdlib.js" integrity="sha512-wYP7mTZHsGAGcwwof7CHkCfHXBNhpqpfQbnNaWCCzfba1QWl81KNhG5FmPGfcRPPtV0fmFCJSfmq0KKO294mrQ==" crossorigin="anonymous"></script>
+            <script src="codemirror/lib/codemirror.js"></script>
+            <link rel="stylesheet" href="codemirror/lib/codemirror.css">
+            <script src="codemirror/mode/python/python.js"></script>
+            <link  href="codemirror/theme/darcula.css" rel="stylesheet">
+            <script src="codemirror/addon/edit/matchbrackets.js"></script>
+            <script src="codemirror/addon/edit/matchtags.js"></script>
             <link rel="stylesheet" href="style.css">
+
+            
         </head>
 
         <body onload="brython({debug:1})">
+            <table>
+                <tr>
+                  <td>
+                    <textarea id="editor"></textarea>
+                  </td>
+                  <td><textarea  id="console" ></textarea></td>          
+                </tr> 
+                <tr>
+                    <td>
+                        <button id="run-btn"> Spust</button>
+                        <button id="renew-btn">Obnovit</button>
+                    </td>
+                </tr>               
+              </table>
 
-            <textarea  id="code" cols="30" rows="10">tvuj kod</textarea>            
-            <button id="run-btn">Spust</button>
-            <button id="renew-btn">Obnov</button>
-            <button id="test-btn">Test</button>  
-            <textarea  id="consl" cols="30" rows="10"></textarea> 
-            <input type="text" id="test1">          
+              
 
             <script type="text/python" id="script1">
                 from browser import document,html, window, console
@@ -21,7 +38,7 @@
 
                 class MyOutPut:
                     def __init__(self):
-                        self.console = document['consl']
+                        self.console = document['console']
 
                     def write(self, text):
                         self.console.text = text 
@@ -31,27 +48,27 @@
 
                 storage = window.localStorage
 
-                if storage.getItem('consl'):
-                    document['consl'] <= storage.getItem('consl')     
+                if storage.getItem('console'):
+                    document['console'] <= storage.getItem('console')     
                 
-                def run_code(e):
-                    document['consl'].textContent = ''
-                    code_to_run = document['code'].value 
+                def run_code(e):                                                                             
+                    code_to_run = document['editor'].value                    
                     storage.setItem('code', code_to_run)                                                        
                     eval(code_to_run)
 
                 def remove_code(e):
                     storage.removeItem('code')
-                    document['code'].value = ''
-                    document['consl'].textContent = ''                
+                    document['editor'].value = ''
+                    document['console'].textContent = ''                
                     
 
                 document['run-btn'].bind('click',run_code)
-                document['renew-btn'].bind('click',remove_code)
-                
-            
-            
+                document['renew-btn'].bind('click',remove_code)            
             </script>
+
+            
+            
+            
         </body>
 
     </html>
