@@ -51,10 +51,11 @@
                 if storage.getItem('console'):
                     document['console'] <= storage.getItem('console')     
                 
-                def run_code(e):                                                                             
-                    code_to_run = document['editor'].value                    
-                    storage.setItem('code', code_to_run)                                                        
-                    eval(code_to_run)
+                def run_code(e):
+                    if  document['editor'].value != ""                                                                           
+                        code_to_run = document['editor'].value                    
+                        storage.setItem('code', code_to_run)                                                        
+                        eval(code_to_run)
 
                 def remove_code(e):
                     storage.removeItem('code')
