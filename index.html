@@ -10,27 +10,71 @@
             <script src="codemirror/addon/edit/matchbrackets.js"></script>
             <script src="codemirror/addon/edit/matchtags.js"></script>
             <link rel="stylesheet" href="style.css">
+            <link rel="stylesheet" href="style/bootstrap.min.css">
 
             
         </head>
 
         <body onload="brython({debug:1})">
-            <table>
-                <tr>
-                  <td>
-                    <textarea id="editor"></textarea>
-                  </td>
-                  <td><textarea  id="console" ></textarea></td>          
-                </tr> 
-                <tr>
-                    <td>
-                        <button id="run-btn"> Spust</button>
-                        <button id="renew-btn">Obnovit</button>
-                    </td>
-                </tr>               
-              </table>
-
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <a class="navbar-brand" href="#">Python kurzy</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+            
+                <div class="collapse navbar-collapse" id="navbarColor02">
+                    <ul class="navbar-nav mr-auto">
+                      <li class="nav-item active">
+                        <a class="nav-link" href="../python.html">Lekce
+                          <span class="sr-only">(current)</span>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="../dokumentace/docs.html">Dokumentace</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Profil</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Kontakt</a>
+                      </li>
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                      <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                      <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+              </div>
+            </nav>
+            <div class="row">
+                <div class="col-lg-2">
+                  <div class="list-group">
+                    <a href="python_NG.html" class="list-group-item list-group-item-action">Úvod</a>
+                    <a href="Data_types_1.html" class="list-group-item list-group-item-action ">Datové typy I</a>
+                    <a href="Data_types_2.html" class="list-group-item list-group-item-action ">Datové typy II.</a>
+                    <a href="#" class="list-group-item list-group-item-action active">Proměnné</a>
+                  </div>
+                </div>
+                <div class="col-lg-8">                    
+                    <iframe src="Promenne_zaklady.html" width="100%" height="1200px" frameborder="no"></iframe>                    
+                    <p>Tady bude zadání úlohy</p>
+                    <div class="inline-div">                
+                        <textarea id="editor" class="inline-txtarea"></textarea>
+                    </div>
+                    <div class="inline-div">                
+                        <textarea id="console" class="inline-txtarea"></textarea>
+                    </div> 
+                    <p><button type="button" id="run-btn" class="btn btn-outline-success">Spustit</button>
+                        <button type="button" id="renew-btn"class="btn btn-outline-warning">Obnovit</button>
+                    </p>
+                    <div class="alert alert-dismissible alert-success" id="done" style="display: none">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Well done!</strong> 
+                    </div>
+                    
+                  
+                </div>
               
+              </div>
 
             <script type="text/python" id="script1">
                 from browser import document,html, window, console
@@ -41,26 +85,44 @@
                         self.console = document['console']
 
                     def write(self, text):
-                        self.console.text = text 
+                        self.console.text += text 
                 
                 sys.stdout = MyOutPut() 
                 sys.stderr = MyOutPut()               
 
                 storage = window.localStorage
-
-                if storage.getItem('console'):
-                    document['console'] <= storage.getItem('console')     
                 
-                def run_code(e):                                                                                            
-                    code_to_run = document['editor'].value                    
+                    
+                
+                def run_code(e):
+                    document['console'].textContent = ''                     
+                    code_to_run = myEditor.getValue()
                     storage.setItem('code', code_to_run)                                                        
-                    eval(code_to_run)
+                    exec(code_to_run)                    
+                    display = document['done'].style.display
+                    document['done'].style.display = "inline" if display=="none" else "none"
 
                 def remove_code(e):
                     storage.removeItem('code')
-                    document['editor'].value = ''
+                    myEditor.setValue(default)
                     document['console'].textContent = ''                
                     
+
+                myEditor = window.CodeMirror.fromTextArea(document["editor"],{
+                    "lineNumbers":True,
+                    "mode": "python",
+                    "matchBrackets": True,
+                    "indentUnit": 4,
+                    "theme": "darcula"
+                })
+
+                default = "def mocnina(x):\n    pass"                
+                storage.setItem("default", default)
+
+                if storage.getItem("code"):
+                    myEditor.setValue(storage.getItem("code"))
+                else:
+                    myEditor.setValue(default)
 
                 document['run-btn'].bind('click',run_code)
                 document['renew-btn'].bind('click',remove_code)            

@@ -1,7 +1,16 @@
 textarea {
-  width: 250px;
-  height: 150px;
+  height: 400px;
+  width: 400px;
+  background-color:#2B2B2B;
+  color: #fff;
 }
-table{
- border:  4px solid black;
+.inline-div {
+  display:inline-block;
 }
+.inline-txtarea {
+  resize: none;    
+}
+td {
+  text-align: center;
+}
+
