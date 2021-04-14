@@ -1,3 +1,3 @@
 # Python-editor
  
-Odkaz na editor: <a href="https://ddohnal.github.io/Python-editor/">zde.
+Odkaz na editor  <a href="https://ddohnal.github.io/Python-editor/">ZDE.
